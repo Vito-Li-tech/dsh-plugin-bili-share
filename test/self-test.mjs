@@ -257,16 +257,19 @@ await test('调用方取消 → 抛 AbortError（交给 DSH 记为取消）', as
 })
 
 console.log('renderShareResult')
-await test('成功结果包含短链、封面和 Markdown 图片', () => {
+await test('成功结果包含带标签的短链、标题和 Markdown 图片', () => {
   const text = renderShareResult({
     ok: true,
     shortLink: `https://b23.tv/${SAMPLE_BV}`,
     coverUrl: SAMPLE_PIC.replace('http://', 'https://'),
     title: '标题',
   })
-  assert.match(text, /b23 短链：https:\/\/b23\.tv\/BV1GJ411x7h7/)
+  assert.match(text, /🔗 短链： https:\/\/b23\.tv\/BV1GJ411x7h7/)
+  assert.match(text, /📺 标题： 标题/)
   assert.match(text, /!\[封面\]\(https:\/\/i1\.hdslb\.com/)
-  assert.match(text, /标题：标题/)
+  assert.ok(!text.includes('🖼 封面：'), '不再输出单独的封面地址行')
+  // 短链与标题之间有空行
+  assert.match(text, /🔗 短链： https:\/\/b23\.tv\/BV1GJ411x7h7\n\n📺 标题： 标题/)
 })
 await test('失败结果包含错误与备用链接', () => {
   const text = renderShareResult({ ok: false, shortLink: 'https://example.com/x', coverUrl: '', title: '', error: '解析失败' })

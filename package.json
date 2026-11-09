@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-bili-share",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Bilibili link → b23.tv short link + cover, with a DSH tool, /bili command and share-card panel.",
   "type": "module",
   "main": "lib/index.js",
