@@ -1,0 +1,71 @@
+{
+  "name": "dsh-plugin-bili-share",
+  "version": "1.2.5",
+  "description": "Bilibili link → b23.tv short link + cover, with a DSH tool, /bili command and share-card panel.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node test/self-test.mjs && node test/client-test.mjs",
+    "smoke": "node test/smoke.mjs",
+    "prepublishOnly": "node scripts/check-publish.mjs"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "bilibili",
+    "b23",
+    "short-link",
+    "cover"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vito-Li-tech/dsh-plugin-bili-share.git"
+  },
+  "homepage": "https://github.com/Vito-Li-tech/dsh-plugin-bili-share#readme",
+  "bugs": {
+    "url": "https://github.com/Vito-Li-tech/dsh-plugin-bili-share/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/schemastery": ">=3.18.4 <4"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    }
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-commands"
+      ]
+    },
+    "engines": {
+      "dsh": ">=0.1.7-rc.1"
+    }
+  }
+}

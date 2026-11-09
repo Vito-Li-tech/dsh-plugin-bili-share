@@ -1,0 +1,7 @@
+# dsh-plugin-bili-share — bundle layer
+#
+# 把插件挂进 profile。`name` 必须与 package.json 的 name 完全一致；
+# 配置项（时间、短链前缀等）可以不写，走 Config schema 里的默认值。
+- insert:
+    - id: bili-share
+      name: 'dsh-plugin-bili-share'
