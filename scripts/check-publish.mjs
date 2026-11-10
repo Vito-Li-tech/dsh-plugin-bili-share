@@ -7,7 +7,7 @@ const repo = pkg.repository && pkg.repository.url ? pkg.repository.url : ''
 if (repo === '' || repo.includes('OWNER')) {
   console.error('')
   console.error('[npm publish] package.json 里的 OWNER 还没换成你的 GitHub 用户名。')
-  console.error('             需要改 repository / homepage / bugs 三处，例如 gazer。')
+  console.error('             需要改 repository / homepage / bugs 三处，例如 your-github-name。')
   console.error('')
   process.exit(1)
 }

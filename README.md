@@ -109,7 +109,7 @@ node test/smoke.mjs         # 联网冒烟
 插件以 tgz 包安装进 profile（DSH 的模块解析只对 profile 内的包生效，`link:` 到工作区会拿不到 `@deepseek-ai/*`）。
 
 ```powershell
-cd C:\Users\Gazer\Documents\deepseek-harness\default-workspace\dsh-plugin-bili-share
+cd C:\path\to\dsh-plugin-bili-share
 Remove-Item *.tgz -Force
 npm pack --pack-destination .
 ```
