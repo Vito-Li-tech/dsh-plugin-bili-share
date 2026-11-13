@@ -59,6 +59,7 @@ Bilibili 视频链接 → **b23.tv 短链** + **封面直链**，并且提供：
 - 短链直接拼官方稳定格式 `https://b23.tv/<BV号>`，不调用已失效的 `api.biliapi.net/x/share/click`。
 - 所有预期内失败都返回 `ok:false` + `error`（并原样回传输入 URL 作为备用短链），不会抛异常打断会话。
 - 浏览器端通过本地接口 `/bili-share/api` 取数据；封面走 `/image` 代理（只允许 B 站图床，防 SSRF），画布生成分享卡时不受 CORS 限制。
+- 接口先委托宿主 `connection.requestRejection` 信任栅栏（Host/Origin、DNS 重绑定、浏览器鉴权），再做套接字回环检查；栅栏异常按拒绝处理（fail-closed），反向代理部署时不只依赖远端地址。
 
 ## 文件结构
 

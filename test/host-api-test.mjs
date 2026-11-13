@@ -7,6 +7,7 @@ import { apply } from '../lib/index.js'
 let registered = null
 let hostCommand = null
 let tools = []
+let fakeConnection
 
 const ctx = {
   tools: {
@@ -23,6 +24,9 @@ const ctx = {
     if (deps[0] === 'webServer') {
       callback({
         effect,
+        get(name) {
+          return name === 'connection' ? fakeConnection : undefined
+        },
         webServer: {
           register(options) {
             registered = options
@@ -148,7 +152,33 @@ function call(pathname, { remoteAddress = '127.0.0.1', method = 'GET' } = {}) {
   assert.equal(res.status, 404)
 }
 
-// 7) /bili 宿主命令：直接返回结果文本
+// 7) 宿主信任栅栏：拒绝码透传、异常 fail-closed、放行不拦截
+{
+  fakeConnection = { requestRejection: () => 403 }
+  let res = await call('/bili-share/api/resolve?url=BV1GJ411x7h7')
+  assert.equal(res.status, 403)
+  assert.match(JSON.parse(res.body).error, /host trust fence/)
+
+  fakeConnection = { requestRejection: () => 401 }
+  res = await call('/bili-share/api/resolve?url=BV1GJ411x7h7')
+  assert.equal(res.status, 401)
+
+  fakeConnection = {
+    requestRejection() {
+      throw new Error('gate exploded')
+    },
+  }
+  res = await call('/bili-share/api/resolve?url=BV1GJ411x7h7')
+  assert.equal(res.status, 403)
+
+  fakeConnection = { requestRejection: () => undefined }
+  res = await call('/bili-share/api/resolve?url=BV1GJ411x7h7')
+  assert.equal(res.status, 200)
+
+  fakeConnection = undefined
+}
+
+// 8) /bili 宿主命令：直接返回结果文本
 {
   const ok = await hostCommand.handler({ rawInput: 'BV1GJ411x7h7' })
   assert.equal(ok.kind, 'success')
@@ -160,4 +190,4 @@ function call(pathname, { remoteAddress = '127.0.0.1', method = 'GET' } = {}) {
   assert.match(empty.text, /用法/)
 }
 
-console.log('PASS: host API 路由、/bili 命令、SSRF 拦截、图片代理均正常')
+console.log('PASS: host API 路由、信任栅栏、/bili 命令、SSRF 拦截、图片代理均正常')

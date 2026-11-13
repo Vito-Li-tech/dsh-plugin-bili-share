@@ -66,8 +66,21 @@ description:
   `tarball: https://github.com/<owner>/dsh-plugin-bili-share/releases/latest/download/dsh-plugin-bili-share.tgz`
 - 截图：仓库根已有 `screenshots.json`，市场会读取（`docs/share-card.png`）
 
-## 更新版本
+## 更新版本（市场用固定文件名）
 
-1. 改 `package.json` 的 `version`
-2. `npm publish`
-3. 市场会按 npm 版本提示更新；列表条目不用改
+市场条目的 `tarball:` 已改成不带版本号的地址：
+
+```
+https://github.com/<owner>/dsh-plugin-bili-share/releases/latest/download/dsh-plugin-bili-share.tgz
+```
+
+以后每次发版：
+
+1. 改 `package.json` 的 `version`，`npm pack`
+2. `git tag vX.Y.Z && git push origin main vX.Y.Z`
+3. 新建 GitHub Release，**同时上传两个附件**（内容相同）：
+   - `dsh-plugin-bili-share-X.Y.Z.tgz`（可追溯）
+   - `dsh-plugin-bili-share.tgz`（固定名，`latest/download` 用）
+4. 市场条目不用再改，`latest` 会自动指向新 Release 的固定名附件
+
+npm 发布成功的话，市场会优先用 npm 版本并显示下载量，条目同样不用改。
